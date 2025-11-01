@@ -11,10 +11,6 @@ data "aws_ami" "os_image" {
   }
 }
 
-resource "aws_key_pair" "deployer" {
-  key_name   = "terra-automate-key"
-  public_key = file("terra-key.pub")
-}
 
 resource "aws_security_group" "allow_user_to_connect" {
   name        = "allow TLS"
@@ -53,19 +49,21 @@ resource "aws_security_group" "allow_user_to_connect" {
 resource "aws_instance" "testinstance" {
   ami                    = data.aws_ami.os_image.id
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.deployer.key_name
+  key_name               = "twsproject"  # <-- use existing AWS key
   vpc_security_group_ids = [aws_security_group.allow_user_to_connect.id]
   subnet_id              = module.vpc.public_subnets[0]
   user_data              = file("${path.module}/install_tools.sh")
+
   tags = {
     Name = "Jenkins-Automate"
   }
+
   root_block_device {
     volume_size = 20
     volume_type = "gp3"
   }
-
 }
+
 
 resource "aws_eip" "jenkins_server_ip" {
   instance = aws_instance.testinstance.id
