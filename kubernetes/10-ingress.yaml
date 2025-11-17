@@ -14,17 +14,10 @@ metadata:
     kubernetes.io/ingress.class: alb
 spec:
   rules:
-  - host: min2max.online
+  - host: easyshop.min2max.online
     http:
       paths:
-      - path: /argocd
-        pathType: Prefix
-        backend:
-          service:
-            name: my-argo-cd-argocd-server
-            port:
-              number: 80
-      - path: /app
+      - path: /
         pathType: Prefix
         backend:
           service:
