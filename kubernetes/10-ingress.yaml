@@ -15,6 +15,7 @@ metadata:
 spec:
   rules:
   - host: easyshop.min2max.online
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -23,4 +24,3 @@ spec:
             name: easyshop-service
             port:
               number: 80
-
